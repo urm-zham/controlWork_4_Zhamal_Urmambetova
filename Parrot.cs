@@ -10,27 +10,35 @@ public class Parrot
     private int _mood;
     private int _health;
     [JsonIgnore] private IParrotStrategy _strategy;
-    // public int Satiety { get; private set; }
-    // public int Mood { get; private set; }
-    // public int Health { get; private set; }
 
     [JsonIgnore] public double LifeQuality => ((_satiety + _mood + _health) / 3.0);
 
     public int Satiety 
     { 
         get => _satiety;
-        private set => _satiety = value;
+        set => _satiety = value;
     }
     public int Mood 
     { 
         get => _mood;
-        private set => _mood = value;
+        set => _mood = value;
     }
     public int Health 
     { 
         get => _health;
-        private set => _health = value;
+        set => _health = value;
     }
+
+    public delegate void FoodPoisonHandler();
+    public delegate void InjuryHandler();
+    public delegate void GreatDoctorHandler();
+
+
+
+    public event FoodPoisonHandler? FoodPoisoning;
+    public event InjuryHandler? Injury;
+    public event GreatDoctorHandler? GreatDoctor;
+
 
 
     public Parrot(string name, int age)
@@ -43,6 +51,16 @@ public class Parrot
         _mood = 10;
         _health = Health;
         _health = 10;
+        setStrategy(age);
+    }
+
+    public Parrot(int satiety, int mood, int health, string name, int age)
+    {
+        _satiety = satiety;
+        _mood = mood;
+        _health = health;
+        Name = name;
+        Age = age;
         setStrategy(age);
     }
 
@@ -73,6 +91,14 @@ public class Parrot
         Console.WriteLine("\nYou decided to feed " + Name);
         _strategy.Feed(ref _satiety, ref _mood);
         PrintParrotInfo();
+        if (new Random().Next(100) < 25)
+        {
+            FoodPoisoning?.Invoke();
+            Console.WriteLine(Name + " had a food poisoning");
+            _strategy.LowerMood(ref _mood);
+            _strategy.LowerHealth(ref _health);
+            PrintParrotInfo();
+        }
     }
     
     public void Play()
@@ -80,6 +106,16 @@ public class Parrot
         Console.WriteLine("\nYou decided to play with " + Name);
         _strategy.Play(ref _satiety, ref _mood, ref _health);
         PrintParrotInfo();
+        
+        if (new Random().Next(100) < 25)
+        {
+            Injury?.Invoke();
+            Console.WriteLine(Name + " got injured while playing");
+            _strategy.LowerMood(ref _mood);
+            _strategy.LowerHealth(ref _health);
+            PrintParrotInfo();
+        }
+        
     }
     
     public void Heal()
@@ -87,11 +123,19 @@ public class Parrot
         Console.WriteLine("\nYou decided to heal " + Name);
         _strategy.Heal(ref _satiety, ref _mood, ref _health);
         PrintParrotInfo();
+        if (new Random().Next(100) < 25)
+        {
+            GreatDoctor?.Invoke();
+            Console.WriteLine(Name + "'s doctor was very professional");
+            _strategy.IncreaseMood(ref _mood);
+            _strategy.IncreaseHealth(ref _health);
+            PrintParrotInfo();
+        }
     }
 
     public void DoAction(string action)
     {
-        switch (action)
+        switch (action.ToLower())
         {
             case "play" :
                 Play();

@@ -21,4 +21,34 @@ public class YoungParrotStrategy : IParrotStrategy
         mood -= 2;
         health += 10;
     }
+
+    public void LowerSatiety(ref int satiety)
+    {
+        satiety -= 2;
+    }
+
+    public void IncreaseSatiety(ref int satiety)
+    {
+        satiety += 10;
+    }
+
+    public void LowerMood(ref int mood)
+    {
+        mood -= 2;
+    }
+
+    public void IncreaseMood(ref int mood)
+    {
+        mood += 10;
+    }
+
+    public void LowerHealth(ref int health)
+    {
+        health -= 2;
+    }
+
+    public void IncreaseHealth(ref int health)
+    {
+        health += 10;
+    }
 }

@@ -21,4 +21,34 @@ public class AdultParrotStrategy :IParrotStrategy
         mood -= 5;
         health += 5;
     }
+    
+    public void LowerSatiety(ref int satiety)
+    {
+        satiety -= 5;
+    }
+
+    public void IncreaseSatiety(ref int satiety)
+    {
+        satiety += 5;
+    }
+
+    public void LowerMood(ref int mood)
+    {
+        mood -= 5;
+    }
+
+    public void IncreaseMood(ref int mood)
+    {
+        mood += 5;
+    }
+
+    public void LowerHealth(ref int health)
+    {
+        health -= 5;
+    }
+
+    public void IncreaseHealth(ref int health)
+    {
+        health += 5;
+    }
 }
