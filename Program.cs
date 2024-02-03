@@ -1,27 +1,20 @@
 ﻿using controlWork_4;
 
 ParrotsList parrots = new ParrotsList();
-parrots.Add(new Parrot("Chipi", 1));
-parrots.PrintAll();
+JsonUtil.CheckFile();
+parrots = JsonUtil.GetParrotsList(ref parrots);
 
-string userParrotName = UserUtil.AskUser<string>("Please enter new parrot's NAME:");
-int userParrotAge = UserUtil.AskUser<int>("Please enter new parrot's AGE:");
-
-while (!(userParrotAge >= 0 && userParrotAge <= 50))
+do
 {
-    Console.WriteLine("Enter AGE between 0 and 50!");
-    userParrotAge = UserUtil.AskUser<int>("Please enter new parrot's AGE:");
-}
+    Parrot userParrot = UserUtil.AskUserForNewParrot();
+    parrots.Add(userParrot);
+} while (UserUtil.AskUserToContinue("Do you want to add another NEW parrot? (YES - [Any key], NO - [n, no, e]"));
 
-Parrot userParrot = new Parrot(userParrotName, userParrotAge);
-parrots.Add(userParrot);
 
+do
+{
+    UserUtil.AskUserToChooseParrot(parrots);
+} while (UserUtil.AskUserToContinue("Do you want to add choose ANOTHER parrot? (YES - [Any key], NO - [n, no, e]"));
+    
 parrots.PrintAll();
-
-parrots.GetRandom().Play();
-parrots.SearchByNameAge(userParrotName, userParrotAge).Feed();
-parrots.GetRandom().Heal();
-
-parrots.PrintAll();
-
-
+JsonUtil.OverwriteFile(parrots);

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace controlWork_4;
 
 public class Parrot
@@ -7,9 +9,12 @@ public class Parrot
     private int _satiety;
     private int _mood;
     private int _health;
-    private IParrotStrategy _strategy;
+    [JsonIgnore] private IParrotStrategy _strategy;
+    // public int Satiety { get; private set; }
+    // public int Mood { get; private set; }
+    // public int Health { get; private set; }
 
-    public double LifeQuality => ((_satiety + _mood + _health) / 3.0);
+    [JsonIgnore] public double LifeQuality => ((_satiety + _mood + _health) / 3.0);
 
     public int Satiety 
     { 
@@ -65,22 +70,41 @@ public class Parrot
 
     public void Feed()
     {
-        Console.WriteLine("You decided to feed " + Name);
+        Console.WriteLine("\nYou decided to feed " + Name);
         _strategy.Feed(ref _satiety, ref _mood);
         PrintParrotInfo();
     }
     
     public void Play()
     {
-        Console.WriteLine("You decided to play with " + Name);
+        Console.WriteLine("\nYou decided to play with " + Name);
         _strategy.Play(ref _satiety, ref _mood, ref _health);
         PrintParrotInfo();
     }
     
     public void Heal()
     {
-        Console.WriteLine("You decided to heal " + Name);
+        Console.WriteLine("\nYou decided to heal " + Name);
         _strategy.Heal(ref _satiety, ref _mood, ref _health);
         PrintParrotInfo();
+    }
+
+    public void DoAction(string action)
+    {
+        switch (action)
+        {
+            case "play" :
+                Play();
+                break;
+            case "feed" :
+                Feed();
+                break;
+            case "heal" :
+                Heal();
+                break;
+            default:
+                Console.WriteLine("Action not found.");
+                break;
+        }
     }
 }
