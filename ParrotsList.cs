@@ -3,6 +3,7 @@ namespace controlWork_4;
 public class ParrotsList
 {
     private List<Parrot> _parrots;
+    public int Count => _parrots.Count;
 
     public ParrotsList()
     {
@@ -12,6 +13,7 @@ public class ParrotsList
     public void Add(Parrot parrot)
     {
         _parrots.Add(parrot);
+        PrintAll();
     }
 
     public void Sort()
@@ -33,25 +35,29 @@ public class ParrotsList
         return null;
     }
     
-    public int GetIndexByNameAge(string name, int age)
+    public Parrot? SearchByName(string name)
     {
         if (_parrots.Count > 0)
-            return _parrots.FindIndex(parrot => parrot.Name == name && parrot.Age == age);
-        return -1;
+            return _parrots.FirstOrDefault(parrot => parrot.Name == name);
+        return null;
     }
+    
     
     public void PrintAll()
     {
-        ConsoleColor defaultColor = Console.ForegroundColor;
-        Console.ForegroundColor = ConsoleColor.Green;
-        
-        Console.WriteLine("\n--------|------|---------|-------|--------|------------");
-        Console.WriteLine("Name    | Age  | Satiety | Mood  | Health | LifeQuality");
-        Console.WriteLine("--------|------|---------|-------|--------|------------");
-        Sort();
-        _parrots.ForEach(parrot => Console.WriteLine(parrot.GetParrotInfo()));
-        Console.WriteLine("--------|------|---------|-------|--------|------------\n");
-        
-        Console.ForegroundColor = defaultColor;
+        if (_parrots.Count > 0)
+        {
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            Console.WriteLine("\n--------|------|---------|-------|--------|------------");
+            Console.WriteLine("Name    | Age  | Satiety | Mood  | Health | LifeQuality");
+            Console.WriteLine("--------|------|---------|-------|--------|------------");
+            Sort();
+            _parrots.ForEach(parrot => Console.WriteLine(parrot.GetParrotInfo()));
+            Console.WriteLine("--------|------|---------|-------|--------|------------\n");
+
+            Console.ForegroundColor = defaultColor;
+        }
     }
 }
